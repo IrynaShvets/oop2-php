@@ -20,41 +20,56 @@ use \App\Category;
     $errorsDate = [];
     $errorsPublishInIndex = [];
     $errorsCategory = [];
+
     $validEmail = false;
+    $validTitle = false;
+    $validAnnotation = false;
+    $validContent = false;
+    $validViews = false;
+    $validDate = false;
+    $validPublishInIndex = false;
+    $validCategory = false;
 
   if(isset($_POST['submit'])){
       $validationTitle = new Title($_POST);
       $_SESSION['title'] = $validationTitle;
       $errorsTitle = $validationTitle->validate();
+      $validTitle = $validationTitle->validTitle;
 
       $validationAnnotation = new Annotation($_POST);
       $_SESSION['annotation'] = $validationAnnotation;
       $errorsAnnotation = $validationAnnotation->validate();
+      $validAnnotation = $validationAnnotation->validAnnotation;
 
       $validationContent = new Content($_POST);
       $_SESSION['content'] = $validationContent;
       $errorsContent = $validationContent->validate();
+      $validContent = $validationContent->validContent;
 
       $validationEmail = new Email($_POST);
       $_SESSION['email'] = $validationEmail;
-      $validEmail = $validationEmail->validEmail;
       $errorsEmail = $validationEmail->validate();
+      $validEmail = $validationEmail->validEmail;
 
       $validationViews = new Views($_POST);
       $_SESSION['views'] = $validationViews;
       $errorsViews = $validationViews->validate();
+      $validViews = $validationViews->validViews;
 
       $validationDate = new Date($_POST);
       $_SESSION['date'] = $validationDate;
       $errorsDate = $validationDate->validate();
+      $validDate = $validationDate->validDate;
 
       $validationPublishInIndex = new PublishInIndex($_POST);
       $_SESSION['publishInIndex'] = $validationPublishInIndex;
       $errorsPublishInIndex = $validationPublishInIndex->validate();
+      $validPublishInIndex = $validationPublishInIndex->validPublishInIndex;
 
       $validationCategory = new Category($_POST);
       $_SESSION['category'] = $validationCategory;
       $errorsCategory = $validationCategory->validate();
+      $validCategory = $validationCategory->validCategory;
   }
 
 
@@ -170,7 +185,7 @@ use \App\Category;
                             value="<?php echo ($_POST['date']) ?? '' ?>"
                     >
                     <div class="invalid-feedback"></div>
-                    <span class="error"><?php echo $errorsViews['date'] ?? '' ?></span>
+                    <span class="error"><?php echo $errorsDate['date'] ?? '' ?></span>
                 </div>
             </div>
 
@@ -203,7 +218,7 @@ use \App\Category;
                         </label>
                     </div>
                     <div class="invalid-feedback"></div>
-                    <span class="error">*<?php echo $errorsViews['publish_in_index'] ?? '' ?></span>
+                    <span class="error">*<?php echo $errorsPublishInIndex['publish_in_index'] ?? '' ?></span>
                 </div>
             </div>
 
@@ -226,7 +241,7 @@ use \App\Category;
                     <button type="submit" name="submit" class="btn btn-primary">Отправить</button>
                 </div>
                 <div class="col-md-3">
-                    <?php if ($validEmail === true && isset($_POST['submit'])) { ?>
+                    <?php if ($validTitle === true && $validAnnotation === true && $validContent === true && $validPublishInIndex === true && $validCategory === true && $validDate === true && $validViews === true && $validEmail === true && isset($_POST['submit'])) { ?>
                         <div class="alert alert-success">
                             Форма валидна
                         </div>

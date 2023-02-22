@@ -7,6 +7,7 @@ class Content extends Validator
     private $data;
     private $errorsContent = [];
     private $content = 'content';
+    public $validContent = true;
 
     public function __construct($content)
     {
@@ -17,6 +18,7 @@ class Content extends Validator
     {
         if (isset($this->data['content'])) {
             if (strlen($this->data['content']) > 500) {
+                $this->validContent = false;
                 $this->addContentError('content', 'The content field must not exceed 30,000 characters');
             }
         }

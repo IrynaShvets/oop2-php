@@ -8,7 +8,8 @@ class Date extends Validator
 {
     private $data;
     private $errorsDate = [];
-    private $date = 'date';
+    public $date = 'date';
+    public $validDate = true;
 
     public function __construct($date)
     {
@@ -22,6 +23,7 @@ class Date extends Validator
             $date2 = new DateTime($this->data['date']);
             $diff = $date1 < $date2;
             if ((bool)($diff === true)) {
+                $this->validDate = false;
                 $this->addDateError('date', 'The publication date must not be earlier than the current date');
             }
         }
