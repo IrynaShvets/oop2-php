@@ -6,7 +6,7 @@ class PublishInIndex extends Validator
 {
 
     private $data;
-    private $errorsPublishInIndex = [];
+    private $errorsPublishInIndex = '';
     private $publish_in_index = 'publish_in_index';
     public $validPublishInIndex = true;
 
@@ -18,14 +18,13 @@ class PublishInIndex extends Validator
     public function validate()
     {
         if (empty($this->data['publish_in_index'])) {
-            $this->validPublishInIndex = false;
-            $this->addPublishInIndexError('publish_in_index', 'The publish field cannot be empty');
+            return $this->validPublishInIndex = false;
         }
-        return $this->errorsPublishInIndex;
+        return $this->validPublishInIndex;
     }
 
-    private function addPublishInIndexError($key, $val)
+    public function addPublishInIndexError()
     {
-        $this->errorsPublishInIndex[$key] = $val;
+        return $this->errorsPublishInIndex = 'The publish field cannot be empty';
     }
 }

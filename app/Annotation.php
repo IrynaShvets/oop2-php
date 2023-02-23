@@ -18,15 +18,14 @@ class Annotation extends Validator
     {
         if (isset($this->data['annotation'])) {
             if (strlen($this->data['annotation']) > 500) {
-                $this->validAnnotation = false;
-                $this->addAnnotationError('annotation', 'The annotation field should not exceed 500 characters');
+                return $this->validAnnotation = false;
             }
         }
-        return $this->errorsAnnotation;
+        return $this->validAnnotation;
     }
 
-    private function addAnnotationError($key, $val)
+    public function addAnnotationError()
     {
-        $this->errorsAnnotation[$key] = $val;
+        return $this->errorsAnnotation['annotation'] = 'The annotation field should not exceed 500 characters';
     }
 }

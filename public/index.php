@@ -12,14 +12,14 @@ use \App\Date;
 use \App\PublishInIndex;
 use \App\Category;
 
-    $errorsTitle = [];
-    $errorsAnnotation = [];
-    $errorsContent = [];
-    $errorsEmail = [];
-    $errorsViews = [];
-    $errorsDate = [];
-    $errorsPublishInIndex = [];
-    $errorsCategory = [];
+    $errorsTitle = '';
+    $errorsAnnotation = '';
+    $errorsContent = '';
+    $errorsEmail = '';
+    $errorsViews = '';
+    $errorsDate = '';
+    $errorsPublishInIndex = '';
+    $errorsCategory = '';
 
     $validEmail = false;
     $validTitle = false;
@@ -33,45 +33,53 @@ use \App\Category;
   if(isset($_POST['submit'])){
       $validationTitle = new Title($_POST);
       $_SESSION['title'] = $validationTitle;
-      $errorsTitle = $validationTitle->validate();
-      $validTitle = $validationTitle->validTitle;
+      $errorsTitle = $validationTitle->addTitleError();
+      $validTitle = $validationTitle->validate();
 
       $validationAnnotation = new Annotation($_POST);
       $_SESSION['annotation'] = $validationAnnotation;
-      $errorsAnnotation = $validationAnnotation->validate();
-      $validAnnotation = $validationAnnotation->validAnnotation;
+      $errorsAnnotation = $validationAnnotation->addAnnotationError();
+      $validAnnotation = $validationAnnotation->validate();
 
       $validationContent = new Content($_POST);
       $_SESSION['content'] = $validationContent;
-      $errorsContent = $validationContent->validate();
-      $validContent = $validationContent->validContent;
+      $errorsContent = $validationContent->addContentError();
+      $validContent = $validationContent->validate();
 
       $validationEmail = new Email($_POST);
       $_SESSION['email'] = $validationEmail;
-      $errorsEmail = $validationEmail->validate();
-      $validEmail = $validationEmail->validEmail;
+      $errorsEmail = $validationEmail->addEmailError();
+      $validEmail = $validationEmail->validate();
 
       $validationViews = new Views($_POST);
       $_SESSION['views'] = $validationViews;
-      $errorsViews = $validationViews->validate();
-      $validViews = $validationViews->validViews;
+      $errorsViews = $validationViews->addViewsError();
+      $validViews = $validationViews->validate();
 
       $validationDate = new Date($_POST);
       $_SESSION['date'] = $validationDate;
-      $errorsDate = $validationDate->validate();
-      $validDate = $validationDate->validDate;
+      $errorsDate = $validationDate->addDateError();
+      $validDate = $validationDate->validate();
 
       $validationPublishInIndex = new PublishInIndex($_POST);
       $_SESSION['publishInIndex'] = $validationPublishInIndex;
-      $errorsPublishInIndex = $validationPublishInIndex->validate();
-      $validPublishInIndex = $validationPublishInIndex->validPublishInIndex;
+      $errorsPublishInIndex = $validationPublishInIndex->addPublishInIndexError();
+      $validPublishInIndex = $validationPublishInIndex->validate();
 
       $validationCategory = new Category($_POST);
       $_SESSION['category'] = $validationCategory;
-      $errorsCategory = $validationCategory->validate();
-      $validCategory = $validationCategory->validCategory;
+      $errorsCategory = $validationCategory->addCategoryError();
+      $validCategory = $validationCategory->validate();
   }
 
+ $isValid = $validTitle === true &&
+     $validAnnotation === true &&
+     $validContent === true &&
+     $validPublishInIndex === true &&
+     $validCategory === true &&
+     $validDate === true &&
+     $validViews === true &&
+     $validEmail === true;
 
 ?>
 
@@ -107,7 +115,7 @@ use \App\Category;
                             value="<?php echo ($_POST['title']) ?? '' ?>"
                     >
                     <div class="invalid-feedback"></div>
-                    <span class="error">*<?php echo $errorsTitle['title'] ?? '' ?></span>
+                    <span class="error">*<?php echo $validTitle === false ? $errorsTitle : '' ?></span>
                 </div>
             </div>
 
@@ -120,10 +128,10 @@ use \App\Category;
                             class="form-control"
                             cols="30"
                             rows="10"
-                            value="<?php echo ($_POST['annotation']) ?? '' ?>">
+                            >
                     </textarea>
                     <div class="invalid-feedback"></div>
-                    <span class="error"><?php echo $errorsAnnotation['annotation'] ?? '' ?></span>
+                    <span class="error"><?php echo $validAnnotation === false ? $errorsAnnotation : '' ?></span>
                 </div>
             </div>
 
@@ -136,10 +144,9 @@ use \App\Category;
                             class="form-control"
                             cols="30"
                             rows="10"
-                            value="<?php echo ($_POST['content']) ?? '' ?>"
                     ></textarea>
                     <div class="invalid-feedback"></div>
-                    <span class="error"><?php echo $errorsContent['content'] ?? '' ?></span>
+                    <span class="error"><?php echo $validContent === false ? $errorsContent : '' ?></span>
                 </div>
             </div>
 
@@ -155,7 +162,7 @@ use \App\Category;
                     >
                     <div class="invalid-feedback">
                     </div>
-                    <span class="error">*<?php echo $errorsEmail['email'] ?? '' ?></span>
+                    <span class="error">*<?php echo $validEmail === false ? $errorsEmail : '' ?></span>
                 </div>
             </div>
 
@@ -170,7 +177,7 @@ use \App\Category;
                             value="<?php echo ($_POST['views']) ?? '' ?>"
                     >
                     <div class="invalid-feedback"></div>
-                    <span class="error"><?php echo $errorsViews['views'] ?? '' ?></span>
+                    <span class="error"><?php echo $validViews === false ? $errorsViews : '' ?></span>
                 </div>
             </div>
 
@@ -185,7 +192,7 @@ use \App\Category;
                             value="<?php echo ($_POST['date']) ?? '' ?>"
                     >
                     <div class="invalid-feedback"></div>
-                    <span class="error"><?php echo $errorsDate['date'] ?? '' ?></span>
+                    <span class="error"><?php echo $validDate === false ? $errorsDate : '' ?></span>
                 </div>
             </div>
 
@@ -218,7 +225,7 @@ use \App\Category;
                         </label>
                     </div>
                     <div class="invalid-feedback"></div>
-                    <span class="error">*<?php echo $errorsPublishInIndex['publish_in_index'] ?? '' ?></span>
+                    <span class="error">*<?php echo $validPublishInIndex === false ? $errorsPublishInIndex : '' ?></span>
                 </div>
             </div>
 
@@ -228,11 +235,11 @@ use \App\Category;
                     <select id="category" class="form-control" name="category">
                         <option disabled selected>Выберете категорию из списка..</option>
                         <option value="1">Спорт</option>
-                        <option value="2>">Культура</option>
+                        <option value="2">Культура</option>
                         <option value="3">Политика</option>
                     </select>
                     <div class="invalid-feedback"></div>
-                    <span class="error"><?php echo $errorsCategory['category'] ?? '' ?></span>
+                    <span class="error"><?php echo $validCategory === false ? $errorsCategory : '' ?></span>
                 </div>
             </div>
 
@@ -241,7 +248,7 @@ use \App\Category;
                     <button type="submit" name="submit" class="btn btn-primary">Отправить</button>
                 </div>
                 <div class="col-md-3">
-                    <?php if ($validTitle === true && $validAnnotation === true && $validContent === true && $validPublishInIndex === true && $validCategory === true && $validDate === true && $validViews === true && $validEmail === true && isset($_POST['submit'])) { ?>
+                    <?php if ($isValid === true && isset($_POST['submit'])) { ?>
                         <div class="alert alert-success">
                             Форма валидна
                         </div>

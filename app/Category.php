@@ -5,7 +5,7 @@ namespace App;
 class Category extends Validator
 {
     private $data;
-    private $errorsCategory = [];
+    private $errorsCategory = '';
     private $category = 'category';
     public $validCategory = true;
 
@@ -18,13 +18,12 @@ class Category extends Validator
     {
         if (isset($this->data['category']) && empty($this->data['category'])) {
             $this->validCategory = false;
-            $this->addCategoryError('category', 'The category field must be one of the values [1, 2, 3]');
         }
-        return $this->errorsCategory;
+        return $this->validCategory;
     }
 
-    private function addCategoryError($key, $val)
+    public function addCategoryError()
     {
-        $this->errorsCategory[$key] = $val;
+        return $this->errorsCategory = 'The category field must be one of the values [1, 2, 3]';
     }
 }

@@ -5,7 +5,7 @@ namespace App;
 class Content extends Validator
 {
     private $data;
-    private $errorsContent = [];
+    private $errorsContent = '';
     private $content = 'content';
     public $validContent = true;
 
@@ -17,16 +17,15 @@ class Content extends Validator
     public function validate()
     {
         if (isset($this->data['content'])) {
-            if (strlen($this->data['content']) > 500) {
+            if (strlen($this->data['content']) > 30000) {
                 $this->validContent = false;
-                $this->addContentError('content', 'The content field must not exceed 30,000 characters');
             }
         }
-        return $this->errorsContent;
+        return $this->validContent;
     }
 
-    private function addContentError($key, $val)
+    public function addContentError()
     {
-        $this->errorsContent[$key] = $val;
+        return $this->errorsContent = 'The content field must not exceed 30,000 characters';
     }
 }

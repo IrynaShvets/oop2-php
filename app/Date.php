@@ -7,7 +7,7 @@ use \DateTime;
 class Date extends Validator
 {
     private $data;
-    private $errorsDate = [];
+    private $errorsDate = '';
     public $date = 'date';
     public $validDate = true;
 
@@ -23,15 +23,14 @@ class Date extends Validator
             $date2 = new DateTime($this->data['date']);
             $diff = $date1 < $date2;
             if ((bool)($diff === true)) {
-                $this->validDate = false;
-                $this->addDateError('date', 'The publication date must not be earlier than the current date');
+                return $this->validDate = false;
             }
         }
-        return $this->errorsDate;
+        return $this->validDate;
     }
 
-    private function addDateError($key, $val)
+    public function addDateError()
     {
-        $this->errorsDate[$key] = $val;
+        return $this->errorsDate = 'The publication date must not be earlier than the current date';
     }
 }

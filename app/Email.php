@@ -5,7 +5,7 @@ namespace App;
 class Email extends Validator
 {
     private $data;
-    private $errorsEmail = [];
+    private $errorsEmail = '';
     private $email = 'email';
     public $validEmail = true;
 
@@ -16,21 +16,15 @@ class Email extends Validator
 
     public function validate()
     {
-        if (empty(trim($this->data['email']))) {
-            $this->validEmail = false;
-            $this->addEmailError('email', 'Email cannot be empty');
-        } else {
-            if (!filter_var(trim($this->data['email']), FILTER_VALIDATE_EMAIL)) {
-                $this->validEmail = false;
-                $this->addEmailError('email', 'Email must be a valid email address');
-            }
+        if (empty(trim($this->data['email'])) && !filter_var(trim($this->data['email']), FILTER_VALIDATE_EMAIL)) {
+            return $this->validEmail = false;
         }
-        return $this->errorsEmail;
+        return $this->validEmail;
     }
 
-    private function addEmailError($key, $val)
+    public function addEmailError()
     {
-        $this->errorsEmail[$key] = $val;
+        return $this->errorsEmail = 'Email cannot be empty and must be a valid email address';
     }
 }
 

@@ -5,7 +5,7 @@ namespace App;
 class Title extends Validator
 {
     private $data;
-    private $errorsTitle = [];
+    private $errorsTitle = '';
     private $title = 'title';
     public $validTitle = true;
 
@@ -16,24 +16,14 @@ class Title extends Validator
 
     public function validate()
     {
-        if (empty($this->data['title'])) {
-            $this->validTitle = false;
-            $this->addTitleError('title', 'Title cannot be empty');
-        } else {
-            if (strlen($this->data['title']) < 3) {
-                $this->validTitle = false;
-                $this->addTitleError('title', 'The header field must have at least three characters');
-            }
-            if (strlen($this->data['title']) > 255) {
-                $this->validTitle = false;
-                $this->addTitleError('title', 'The header field must not exceed 255 characters');
-            }
+        if (empty($this->data['title']) || strlen($this->data['title']) < 3 || strlen($this->data['title']) > 255) {
+            return $this->validTitle = false;
         }
-        return $this->errorsTitle;
+        return $this->validTitle;
     }
 
-    private function addTitleError($key, $val)
+    public function addTitleError()
     {
-        $this->errorsTitle[$key] = $val;
+        return $this->errorsTitle = 'The header field must not be empty, not less than three characters, not more than 255 characters';
     }
 }
